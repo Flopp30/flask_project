@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="col">
+        <div class="card h-100" style="width: 16rem;">
+            <div class="card-header">
+                id: {{ article }}
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">some article attributes ...</li>
+            </ul>
+        </div>
+    </div>
+    <a href="{{ url_for('article_app.list') }}">
+        <button type="button" class="btn btn-secondary btn-sm">
+            Back to article list
+        </button>
+    </a>
+{% endblock %}
