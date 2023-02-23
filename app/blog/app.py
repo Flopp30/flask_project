@@ -1,40 +1,27 @@
 '''
 Основной файл с контролерами
 '''
-from time import time
+from flask import Flask
 
-from flask import Flask, Response, request, g
-
-app = Flask(__name__)
-
-
-@app.route('/<string:city>', methods=["GET", "POST"])
-def index(city: str):
-    name = request.args.get('name', None)
-    if request.method == 'GET':
-        return Response(f'Hello {city}!', 200)
-    else:
-        return Response(f'Hello {name}!', 200)
+from blog.user.views import userapp
+from blog.article.views import articleapp
 
 
-@app.before_request
-def process_before_request():
+def create_app() -> Flask:
     '''
-    Sets start time to 'g' object
+    Фабрика Flask приложений
+    :return: Flask application
     '''
-    g.start_time = time()
+    app = Flask(__name__)
+    register_blueprints(app)
+    return app
 
 
-@app.after_request
-def process_after_request(response):
+def register_blueprints(app: Flask):
     '''
-    Adds process time in headers
+    Регистрирует все blueprints к указанному приложению
+    :param app: Flask application
+    :return:
     '''
-    if hasattr(g, 'start_time'):
-        response.headers["process-time"] = time() - g.start_time
-
-
-@app.errorhandler(404)
-def handler_404(error):
-    app.logger.error(error)
-    return '404'
+    app.register_blueprint(userapp)
+    app.register_blueprint(articleapp)
