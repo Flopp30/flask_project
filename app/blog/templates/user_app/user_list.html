@@ -11,9 +11,8 @@
                         id: <a href="{{ url_for('user_app.detail', user_id=user.id) }}">{{ user.id }}</a>
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">first name: {{ user.first_name }}</li>
-                        <li class="list-group-item">last name: {{ user.last_name }}</li>
-                        <li class="list-group-item">birthday year: {{ user.birthday_year }}</li>
+                        <li class="list-group-item">Username: {{ user.username }}</li>
+                        <li class="list-group-item">Email: {{ user.email }}</li>
                     </ul>
                 </div>
             </div>

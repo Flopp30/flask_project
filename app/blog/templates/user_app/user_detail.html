@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card h-100" style="width: 16rem;">
+    <div class="card-header">
+        id: {{ user.id }}
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Username: {{ user.username }}</li>
+        <li class="list-group-item">Email: {{ user.email }}</li>
+        <li class="list-group-item">
+            Articles:
+            {% for article in articles %}
+                <a href="{{ url_for('article_app.detail', article_id=article.id) }}">
+                    {{ article.name }}
+                </a>{% if not loop.last %},{% endif %}
+            {% endfor %}
+        </li>
+    </ul>
+</div>
+
+<a href="{{ url_for('user_app.list') }}">
+    <button type="button" class="btn btn-secondary btn-sm">
+        Back to user list
+    </button>
+</a>
+{% endblock %}
