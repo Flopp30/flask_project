@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+    app:
+        env_file:
+            - .env-prod
+        build:
+            dockerfile: ./Dockerfile
+            context: .
+        ports:
+            - 5000:5000
+        depends_on:
+            - pg
+        command: bash -c "flask custom_commands init_db && flask custom_commands create_users && flask custom_commands create_articles && python3 -m flask run --host=0.0.0.0"
+    pg:
+        image: postgres:12
+        environment:
+            POSTGRES_DB: blog
+            POSTGRES_USER: blog_admin
+            POSTGRES_PASSWORD: qwerty123
+            PGDATA: /var/lib/postgresql/data/pgdata
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+
+volumes:
+    pgdata:
