@@ -13,7 +13,7 @@ def user_list():
         Контроллер для user list
         :return: html template
     '''
-    users = User.query.all()
+    users = User.query.filter_by(is_staff=False)
     return render_template(
         'user_app/user_list.html',
         user_list=users,
