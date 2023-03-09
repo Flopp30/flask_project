@@ -2,6 +2,7 @@ from datetime import datetime
 
 from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String, Boolean, LargeBinary, DateTime
+from sqlalchemy.orm import relationship
 
 from blog.extensions import db, flask_bcrypt
 
@@ -21,11 +22,13 @@ class User(CustomBaseModel, UserMixin):
     __tablename__ = 'users'
 
     id = Column('id', Integer(), primary_key=True)
-    first_name = Column('first_name', String(80), unique=True, nullable=False, default='')
-    last_name = Column('last_name', String(80), unique=True, nullable=False, default='')
+    first_name = Column('first_name', String(80), nullable=False, default='')
+    last_name = Column('last_name', String(80), nullable=False, default='')
     _password = Column('password', String(500), nullable=False)
     email = Column('email', String(80), unique=True, nullable=False, default="", server_default="")
     is_staff = Column('is staff', Boolean(), default=False)
+
+    author = relationship("Author", uselist=False, back_populates="user")
 
     @property
     def password(self):
@@ -47,3 +50,6 @@ class User(CustomBaseModel, UserMixin):
         self.password = password
         self.email = email
         self.is_staff = is_staff
+
+
+

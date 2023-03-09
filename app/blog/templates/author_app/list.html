@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for author in author_list %}
+            <div class="col">
+                <div class="card h-100" style="width: 16rem;">
+                    <div class="card-header">
+                        id: <a href="{{ url_for('user_app.detail', user_id=author.user.id) }}">{{ author.user.id }}</a>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">First name: {{ author.user.first_name }}</li>
+                        <li class="list-group-item">Last name: {{ author.user.last_name }}</li>
+                        <li class="list-group-item">Email: {{ author.user.email }}</li>
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

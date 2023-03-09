@@ -8,14 +8,16 @@
             <li class="list-group-item">First name: {{ user.first_name }}</li>
             <li class="list-group-item">Last name: {{ user.last_name }}</li>
             <li class="list-group-item">Email: {{ user.email }}</li>
-            <li class="list-group-item">
-                Articles:
-                {% for article in articles %}
-                    <a href="{{ url_for('article_app.detail', article_id=article.id) }}">
-                        {{ article.name }}
-                    </a>{% if not loop.last %},{% endif %}
-                {% endfor %}
-            </li>
+            {% if user.author %}
+                <li class="list-group-item">Articles:
+                    {% for article in user.author.articles %}
+                        <a href="{{ url_for('article_app.detail', article_id=article.id) }}">
+                            {{ article.title }}
+                        {% if not loop.last %},{% endif %}
+                        </a>
+                    {% endfor %}
+                </li>
+            {% endif %}
         </ul>
     </div>
 
