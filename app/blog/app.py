@@ -4,7 +4,7 @@
 
 from flask import Flask
 
-from blog.extensions import login_manager, migrate, db
+from blog.extensions import login_manager, migrate, db, flask_bcrypt, csrf
 from blog.models.commands import db_commands_app
 from blog.views.article import article_app
 from blog.views.auth import auth_app
@@ -19,21 +19,23 @@ def create_app() -> Flask:
     app = Flask(__name__)
     app.config.from_pyfile('settings.py')
 
-    register_dependencies(app)
+    register_extensions(app)
     register_blueprints(app)
 
     return app
 
 
-def register_dependencies(app: Flask):
+def register_extensions(app: Flask):
     '''
-
+    Подключает расширения
     :param app: Flask application
     :return:
     '''
     login_manager.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
+    csrf.init_app(app)
+    flask_bcrypt.init_app(app)
 
 
 def register_blueprints(app: Flask):
