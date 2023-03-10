@@ -25,7 +25,7 @@
                     </a>
                     <a href="{{ url_for('auth_app.logout') }}"
                        class="nav-link {% if request.endpoint == endpoint -%}active{%- endif %}">
-                        Logout
+                        Logout ({{ current_user.email }})
                     </a>
                     {{ current_user.username }}
                 {% else %}

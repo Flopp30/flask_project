@@ -4,8 +4,8 @@
 
 from flask import Flask
 
+from blog import commands
 from blog.extensions import login_manager, migrate, db, flask_bcrypt, csrf
-from blog.models.commands import db_commands_app
 from blog.views.article import article_app
 from blog.views.auth import auth_app
 from blog.views.author import authors_app
@@ -19,7 +19,7 @@ def create_app() -> Flask:
     '''
     app = Flask(__name__)
     app.config.from_pyfile('settings.py')
-
+    register_commands(app)
     register_extensions(app)
     register_blueprints(app)
 
@@ -45,8 +45,19 @@ def register_blueprints(app: Flask):
     :param app: Flask application
     :return:
     '''
-    app.register_blueprint(db_commands_app)
     app.register_blueprint(user_app)
     app.register_blueprint(article_app)
     app.register_blueprint(auth_app)
     app.register_blueprint(authors_app)
+
+
+def register_commands(app: Flask):
+    '''
+    Регистрирует консольные команды
+    :param app: Flask application
+    '''
+
+    app.cli.add_command(commands.create_users)
+    app.cli.add_command(commands.create_admin)
+    app.cli.add_command(commands.create_articles)
+    app.cli.add_command(commands.create_init_tags)
