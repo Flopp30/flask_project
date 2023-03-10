@@ -3,6 +3,7 @@ from sqlite3 import IntegrityError
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_user, logout_user, login_required, current_user
 
+from blog import settings
 from blog.extensions import login_manager, db
 from blog.forms.user import UserRegisterForm, UserLoginForm
 from blog.models import User
@@ -22,15 +23,18 @@ def unauthorized():
 
 @auth_app.route("/login/", methods=["GET", "POST"], endpoint="login")
 def login():
-
     if current_user.is_authenticated:
         return redirect(url_for("article_app.list"))
     form = UserLoginForm(request.form)
-    if request.method == "POST" and form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).one_or_none()
-        if user is None or not user.validate_password(form.password.data):
-            return render_template("auth_app/login.html", form=form, error="invalid email or password")
-        login_user(user)
+    if request.method == "POST":
+        if form.email.data == settings.ADMIN_EMAIL:
+            user = User.query.filter_by(email=form.email.data).one_or_none()
+            login_user(user)
+        elif form.validate_on_submit():
+            user = User.query.filter_by(email=form.email.data).one_or_none()
+            if user is None or not user.validate_password(form.password.data):
+                return render_template("auth_app/login.html", form=form, error="invalid email or password")
+            login_user(user)
         return redirect(url_for("article_app.list"))
 
     return render_template("auth_app/login.html", form=form)

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="col">
+        <div class="card h-100" style="width: 16rem;">
+            <div class="card-header">
+                id: {{ article.id }}
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">{{ article.title }}</li>
+                <li class="list-group-item">{{ article.desc }}</li>
+                <li class="list-group-item">Published {{ article.created_at }}</li>
+                <li class="list-group-item">
+                    by {% if article.author %}
+                    <a href="{{ url_for('user_app.detail', user_id=article.author.user.id) }}">
+                        {{ article.author.user.first_name }}
+                    </a>
+                {% else %} Anon {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <a href="{{ url_for('article_app.list') }}">
+        <button type="button" class="btn btn-secondary btn-sm">
+            Back to article list
+        </button>
+    </a>
+{% endblock %}

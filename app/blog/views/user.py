@@ -15,7 +15,7 @@ def user_list():
     '''
     users = User.query.filter_by(is_staff=False)
     return render_template(
-        'user_app/user_list.html',
+        'user_app/list.html',
         user_list=users,
     )
 
@@ -27,12 +27,11 @@ def get_user(user_id: int):
         :return: html template
     '''
     user_ = User.query.filter_by(id=user_id).one_or_none()
-    articles = Article.query.filter_by(creator=user_id)
     if user_ is None:
         raise NotFound(f"User #{user_id} doesn't exist!")
-
+    articles = Article.query.filter_by(author_id=user_id)
     return render_template(
-        'user_app/user_detail.html',
+        'user_app/detail.html',
         user=user_,
         articles=articles,
     )
