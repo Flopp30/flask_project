@@ -2,11 +2,13 @@ from sqlite3 import IntegrityError
 
 from flask import Blueprint, render_template, request, current_app, redirect, url_for
 from flask_login import login_required, current_user
+from sqlalchemy.orm import joinedload
 from werkzeug.exceptions import NotFound
 
 from blog.extensions import db
 from blog.forms.article import CreateArticleForm
 from blog.models import Article, User, Author
+from blog.models.article import Tag
 
 # Инициализация blueprint для article
 article_app = Blueprint('article_app', __name__, url_prefix='/article', static_folder='../static')
@@ -32,12 +34,30 @@ def get_article(article_id: int):
         :return: html template
     '''
 
-    article_ = Article.query.filter_by(id=article_id).one_or_none()
+    article_ = Article.query.filter_by(id=article_id). \
+        options(joinedload(Article.tags)). \
+        one_or_none()
     if article_ is None:
         raise NotFound(f"Article #{article_id} doesn't exist!")
     return render_template(
         'article_app/detail.html',
         article=article_,
+    )
+
+
+@article_app.route('/tag/<int:tag_id>', endpoint='articles_for_tag')
+def get_article_for_tag(tag_id: int):
+    '''
+        Контроллер для article_detail
+        :return: html template
+    '''
+
+    tag = Tag.query.filter_by(id=tag_id).options(joinedload(Tag.articles)).one_or_none()
+    if tag is None:
+        raise NotFound(f"Articles for tag #{tag_id} doesn't exist!")
+    return render_template(
+        'article_app/list.html',
+        tag=tag,
     )
 
 
@@ -47,8 +67,16 @@ def create_article():
     error = None
     form = CreateArticleForm(request.form)
 
+    form.tags.choices = [(tag.id, tag.name) for tag in Tag.query.order_by('name')]
+
     if request.method == "POST" and form.validate_on_submit():
         article = Article(title=form.title.data.strip(), desc=form.body.data)
+
+        if form.tags.data:
+            selected_tags = Tag.query.filter(Tag.id.in_(form.tags.data))
+            for tag in selected_tags:
+                article.tags.append(tag)
+
         db.session.add(article)
         if current_user.author:
             article.author = current_user.author

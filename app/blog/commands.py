@@ -1,16 +1,15 @@
 from random import choice
 
-from flask import Blueprint
+import click
 
 from blog import settings
 from blog.extensions import db
 from blog.models import Article, Author
 from blog.models import User
+from blog.models.article import Tag
 
-db_commands_app = Blueprint('custom_commands', __name__)
 
-
-@db_commands_app.cli.command('create_users')
+@click.command('create_users')
 def create_users():
     Article.query.filter().delete()
     User.query.filter().delete()
@@ -20,10 +19,10 @@ def create_users():
         db.session.add(user)
 
     db.session.commit()
-    print("done! users created")
+    click.echo("done! users created")
 
 
-@db_commands_app.cli.command('create_articles')
+@click.command('create_articles')
 def create_articles():
     users = User.query.all()
     for i in range(10):
@@ -34,13 +33,23 @@ def create_articles():
         db.session.add(author)
 
     db.session.commit()
-    print("done! articles created")
+    click.echo("done! articles created")
 
 
-@db_commands_app.cli.command('create_admin')
+@click.command('create_admin')
 def create_admin():
     admin = User(first_name="admin", last_name='1', password=settings.ADMIN_PASSWORD, email=settings.ADMIN_EMAIL,
                  is_staff=True)
     db.session.add(admin)
     db.session.commit()
-    print("done! admin user created")
+    click.echo("done! admin user created")
+
+
+@click.command('create_init_tags')
+def create_init_tags():
+    tags = ('python', 'flask', 'django', 'javascript', 'docker')
+    for name in tags:
+        tag = Tag(name=name)
+        db.session.add(tag)
+    db.session.commit()
+    click.echo('done! tags created: ' + ', '.join(tags))

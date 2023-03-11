@@ -1,39 +1,7 @@
-{#{% extends 'base.html' %}#}
-{#{% block title %}#}
-{#    Login as#}
-{#{% endblock %}#}
-{#{% block content %}#}
-{#        <div class="container-sm" style="max-width: 40%; margin-left: 0px">#}
-{#            <h2>Login:</h2>#}
-{#            {% if error %}#}
-{#                <div class="alert alert-danger" role="alert">#}
-{#                    {{ error }}#}
-{#                </div>#}
-{#            {% endif %}#}
-{##}
-{#            <form method="post">#}
-{#                <div class="mb-3 row">#}
-{#                    <div class="col-sm-10">#}
-{#                        <input type="text" class="form-control" id="staticEmail" name='username' placeholder="username"#}
-{#                               required>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="mb-3 row">#}
-{#                    <div class="col-sm-10">#}
-{#                        <input type="password" class="form-control" id="inputPassword" name="password"#}
-{#                               placeholder="password">#}
-{#                    </div>#}
-{#                </div>#}
-{#                <button type="submit" class="btn btn-secondary btn-sm">Login</button>#}
-{#            </form>#}
-{#        </div>#}
-{#{% endblock %}#}
-
-
 {% extends 'base.html' %}
 {% from 'macro/formhelpers.html' import render_field %}
 {% block title %}
-    User register
+    Login
 {% endblock %}
 
 {% block content %}

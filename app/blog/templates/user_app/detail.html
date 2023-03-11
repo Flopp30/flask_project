@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
+{% block title %}
+    User profile
+{% endblock %}
 {% block content %}
-    <div class="card h-100" style="width: 16rem;">
+    <div class="card h-100" style="width: 16rem; margin-bottom: 15px">
         <div class="card-header">
-            id: {{ user.id }}
+            Email: {{ user.email }}
         </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">First name: {{ user.first_name }}</li>
             <li class="list-group-item">Last name: {{ user.last_name }}</li>
-            <li class="list-group-item">Email: {{ user.email }}</li>
             {% if user.author %}
+                <li class="list-group-item">Articles written: {{ user.author.acticles.count() }}</li>
                 <li class="list-group-item">Articles:
                     {% for article in user.author.articles %}
                         <a href="{{ url_for('article_app.detail', article_id=article.id) }}">

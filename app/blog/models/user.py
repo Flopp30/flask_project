@@ -12,10 +12,6 @@ class CustomBaseModel(db.Model):
 
     created_at = Column('created_at', DateTime(), default=datetime.now)
     updated_at = Column('updated_at', DateTime(), default=datetime.now, onupdate=datetime.now)
-    deleted = Column('Is deleted?', Boolean(), default=False)
-
-    def __del__(self):
-        self.deleted = True
 
 
 class User(CustomBaseModel, UserMixin):
