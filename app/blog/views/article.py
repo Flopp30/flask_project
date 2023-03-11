@@ -34,14 +34,30 @@ def get_article(article_id: int):
         :return: html template
     '''
 
-    article_ = Article.query.filter_by(id=article_id).\
-        options(joinedload(Article.tags)).\
+    article_ = Article.query.filter_by(id=article_id). \
+        options(joinedload(Article.tags)). \
         one_or_none()
     if article_ is None:
         raise NotFound(f"Article #{article_id} doesn't exist!")
     return render_template(
         'article_app/detail.html',
         article=article_,
+    )
+
+
+@article_app.route('/tag/<int:tag_id>', endpoint='articles_for_tag')
+def get_article_for_tag(tag_id: int):
+    '''
+        Контроллер для article_detail
+        :return: html template
+    '''
+
+    tag = Tag.query.filter_by(id=tag_id).options(joinedload(Tag.articles)).one_or_none()
+    if tag is None:
+        raise NotFound(f"Articles for tag #{tag_id} doesn't exist!")
+    return render_template(
+        'article_app/list.html',
+        tag=tag,
     )
 
 

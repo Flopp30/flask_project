@@ -9,6 +9,7 @@ from blog.extensions import login_manager, migrate, db, flask_bcrypt, csrf
 from blog.views.article import article_app
 from blog.views.auth import auth_app
 from blog.views.author import authors_app
+from blog.views.main import main_app
 from blog.views.user import user_app
 
 
@@ -45,6 +46,7 @@ def register_blueprints(app: Flask):
     :param app: Flask application
     :return:
     '''
+    app.register_blueprint(main_app)
     app.register_blueprint(user_app)
     app.register_blueprint(article_app)
     app.register_blueprint(auth_app)

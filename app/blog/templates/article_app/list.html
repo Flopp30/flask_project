@@ -1,17 +1,32 @@
 {% extends 'base.html' %}
+{% block title %}
+    Article list
+{% endblock %}
 {% block content %}
-
     <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for article in article_list %}
-            <div class="col">
-                <div class="card h-100" style="width: 16rem;">
-                    <div class="card-header">
-                        Title: <a
-                            href="{{ url_for('article_app.detail', article_id=article.id) }}">{{ article.title }}</a>
+        {% if article_list %}
+            {% for article in article_list %}
+                <div class="col">
+                    <div class="card h-100" style="width: 16rem;">
+                        <div class="card-header">
+                            Title: <a
+                                href="{{ url_for('article_app.detail', article_id=article.id) }}">{{ article.title }}</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        {% elif tag %}
+            {% for article in tag.articles %}
+                <div class="col">
+                    <div class="card h-100" style="width: 16rem;">
+                        <div class="card-header">
+                            Title: <a
+                                href="{{ url_for('article_app.detail', article_id=article.id) }}">{{ article.title }}</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 
 {% endblock %}
