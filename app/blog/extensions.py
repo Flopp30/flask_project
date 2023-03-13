@@ -1,3 +1,4 @@
+from flask_admin import Admin
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_migrate import Migrate
@@ -15,3 +16,5 @@ db = SQLAlchemy()
 flask_bcrypt = Bcrypt()
 # CSRF protect
 csrf = CSRFProtect()
+# Admin
+admin = Admin(name='Blog Admin Panel', template_mode='bootstrap4')
