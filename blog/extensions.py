@@ -1,5 +1,6 @@
 from flask_admin import Admin
 from flask_bcrypt import Bcrypt
+from flask_combo_jsonapi import Api
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -18,3 +19,5 @@ flask_bcrypt = Bcrypt()
 csrf = CSRFProtect()
 # Admin
 admin = Admin(name='Blog Admin Panel', template_mode='bootstrap4')
+# Api
+api = Api()
