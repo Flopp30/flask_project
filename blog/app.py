@@ -5,7 +5,11 @@
 from flask import Flask
 
 from blog import commands
-from blog.extensions import login_manager, migrate, db, flask_bcrypt, csrf, admin
+from blog.api.tag import TagList, TagDetail
+from blog.api.author import AuthorList, AuthorDetail
+from blog.api.article import ArticleList, ArticleDetail
+from blog.api.user import UserList, UserDetail
+from blog.extensions import login_manager, migrate, db, flask_bcrypt, csrf, admin, api, create_api_spec_plugin
 from blog.views.admin import admin_app
 from blog.views.article import article_app
 from blog.views.auth import auth_app
@@ -24,6 +28,7 @@ def create_app() -> Flask:
     register_commands(app)
     register_extensions(app)
     register_blueprints(app)
+    register_api(app)
 
     return app
 
@@ -55,6 +60,25 @@ def register_blueprints(app: Flask):
     app.register_blueprint(article_app)
     app.register_blueprint(auth_app)
     app.register_blueprint(authors_app)
+
+
+def register_api(app: Flask):
+    api.plugins = [
+        create_api_spec_plugin(app),
+    ]
+    api.init_app(app)
+
+    api.route(TagList, "tag_list", "/api/tags/", tag='Tag')
+    api.route(TagDetail, "tag_detail", "/api/tags/<int:id>/", tag='Tag')
+
+    api.route(UserList, "user_list", "/api/users/", tag="User")
+    api.route(UserDetail, "user_detail", "/api/users/<int:id>/", tag="User")
+
+    api.route(AuthorList, "author_list", "/api/authors/", tag="Author")
+    api.route(AuthorDetail, "author_detail", "/api/authors/<int:id>/", tag="Author")
+
+    api.route(ArticleList, "article_list", "/api/articles/", tag="Article")
+    api.route(ArticleDetail, "article_detail", "/api/articles/<int:id>/", tag="Article")
 
 
 def register_commands(app: Flask):
