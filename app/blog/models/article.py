@@ -24,7 +24,7 @@ class Article(CustomBaseModel):
     tags = relationship("Tag", secondary=article_tag_associations_table, back_populates="articles")
 
     def __repr__(self):
-        return f"<Article #{self.id} {self.name!r}>"
+        return f"<Article #{self.id} {self.title!r}>"
 
     def __init__(self, title, desc):
         self.title = title
@@ -38,3 +38,6 @@ class Tag(CustomBaseModel):
     name = Column(String(120), nullable=False)
 
     articles = relationship("Article", secondary=article_tag_associations_table, back_populates="tags")
+
+    def __str__(self):
+        return self.name

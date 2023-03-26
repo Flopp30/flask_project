@@ -38,7 +38,7 @@ class User(CustomBaseModel, UserMixin):
         return flask_bcrypt.check_password_hash(self._password, password)
 
     def __repr__(self):
-        return f"<User #{self.id} {self.username!r}>"
+        return f"<User #{self.id} {self.email!r}>"
 
     def __init__(self, first_name: str, last_name: str, password: str, email: str, is_staff: bool = False):
         self.first_name = first_name
