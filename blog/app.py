@@ -1,15 +1,17 @@
 '''
-Основной файл с контролерами
+Фабрика Flask приложения
 '''
-
+from combojsonapi.event import EventPlugin
+from combojsonapi.permission import PermissionPlugin
+from combojsonapi.spec import ApiSpecPlugin
 from flask import Flask
 
 from blog import commands
-from blog.api.tag import TagList, TagDetail
-from blog.api.author import AuthorList, AuthorDetail
 from blog.api.article import ArticleList, ArticleDetail
+from blog.api.author import AuthorList, AuthorDetail
+from blog.api.tag import TagList, TagDetail
 from blog.api.user import UserList, UserDetail
-from blog.extensions import login_manager, migrate, db, flask_bcrypt, csrf, admin, api, create_api_spec_plugin
+from blog.extensions import login_manager, migrate, db, flask_bcrypt, csrf, admin, api
 from blog.views.admin import admin_app
 from blog.views.article import article_app
 from blog.views.auth import auth_app
@@ -64,7 +66,17 @@ def register_blueprints(app: Flask):
 
 def register_api(app: Flask):
     api.plugins = [
-        create_api_spec_plugin(app),
+        EventPlugin(),
+        PermissionPlugin(strict=False),
+        ApiSpecPlugin(
+            app=app,
+            tags={
+                "Tag": "Tag API",
+                "User": "User API",
+                "Author": "Author API",
+                "Article": "Article API",
+            }
+        ),
     ]
     api.init_app(app)
 
